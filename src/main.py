@@ -1,20 +1,63 @@
-from src.power import power_function
-from src.constants import SAMPLE_CONSTANT
+import os
+from ls import ls
+from cd import cd
+from cat import cat
+from cp import cp
+from mv import mv
+from rm import rm
 
+def main():
+    while True:
+        current_dir=os.getcwd()
+        s=input(f'{current_dir}>>> ').split()
 
-def main() -> None:
-    """
-    Обязательнная составляющая программ, которые сдаются. Является точкой входа в приложение
-    :return: Данная функция ничего не возвращает
-    """
+        if not s:
+            continue
+        if s:
+            commanda=s[0]
+            match commanda:
+                case 'ls':
+                    if len(s)>1:
+                        ls(' '.join(s[1:]))
+                    else:
+                        ls('.')
+                case 'cd':
+                    if len(s)>1:
+                        cd(s[1])
+                    else:
+                        cd('~')
+                case 'cat':
+                    if len(s)>1:
+                        cat(s[1])
+                    else:
+                        print('ОШИБКА: Не указан файл')
+                case 'cp':
+                    op=''
+                    for i in s:
+                        if i =='-r':
+                            op=i
+                    if len(s)>2:
+                        cp(op,s[1], s[2])
+                    else:
+                        print('неверное кол-во')
+                case 'mv':
+                    if len(s)==3:
+                        mv(s[1], s[2])
+                    elif len(s)==2:
+                        print(f"mv: после '{s[1]}' пропущен операнд, задающий целевой файл")
+                    else:
+                        print('введено лишние')
+                case 'rm':
+                    op=''
+                    for i in s:
+                        if i=='-r':
+                            op='-r'
+                    if len(s)>1:
+                        rm(op, s[1])
+                    else:
+                        print('Ошибка с кол-вом')
+                case 'exit':
+                    break
 
-    target, degree = map(int, input("Введите два числа разделенные пробелом: ").split(" "))
-
-    result = power_function(target=target, power=degree)
-
-    print(result)
-
-    print(SAMPLE_CONSTANT)
-
-if __name__ == "__main__":
+if __name__=='__main__':
     main()
